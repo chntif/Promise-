@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            margin: 0 auto;
+            border: 1px solid red;
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <button id="btn">获取鸡汤</button>
+    </div>
+    <script>
+        const box = document.getElementsByClassName('box')[0]
+        const btn = document.getElementById('btn')
+        btn.onclick = function () {
+
+            // const xhr = new XMLHttpRequest()
+            // xhr.open('GET', 'https://api.oioweb.cn/api/SoulWords')
+            // xhr.send()
+            // xhr.onreadystatechange = function () {
+            //     if (xhr.readyState == 4) {
+            //         data = JSON.parse(xhr.response).result.content
+            //         console.log(data);
+            //         const div = document.createElement('p')
+            //         div.textContent = data
+            //         box.appendChild(div)
+            //     }
+            // }
+
+            // 使用Promise封装
+            const p = new Promise((res, rej) => {
+                const xhr = new XMLHttpRequest()
+                xhr.open('GET', 'https://api.oioweb.cn/api/SoulWords')
+                xhr.send()
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status === 200) {
+                            console.log(xhr);
+
+                            data = JSON.parse(xhr.response).result.content
+                            const div = document.createElement('p')
+                            div.textContent = data
+                            res(div)
+                        } else {
+                            rej('请求出错')
+                        }
+
+                    }
+                }
+            })
+            p.then((value) => {
+                box.appendChild(value)
+            }, (err) => {
+                alert('请求出错')
+            })
+
+        }
+
+
+
+    </script>
+</body>
+
+</html>
